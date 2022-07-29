@@ -38,7 +38,6 @@ public class Main {
         while(end==false){
             new Pantalla();
             String opcion= in.nextLine().trim();
-
             switch (opcion.toUpperCase()){
                 case "L":  //Listado de Tarjetas
                     System.out.println("***********************************");
@@ -49,11 +48,14 @@ public class Main {
                     in.nextLine();
                     break;
                 case "B":  // Busca la info de una tarjeta en especifico
-                        tarjetaService.busqueda();
+                       String numero = tarjetaService.busqueda();
+                       if (numero!=null){tarjetaService.buscarNroTarjeta(numero, listadoTarjetas);};
                     break;
                 case "C":  // Consulta si puede realizar su compra
+                    tarjetaService.consultaCompra();
                     break;
                 case "O":  // Puede operar? Chequea la fecha de vencimiento
+                    tarjetaService.puedoOperarTarjetaVigente();
                     break;
                 case "T":  // Cual es la tasa segun Tarjeta?
                     break;

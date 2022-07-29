@@ -1,21 +1,66 @@
 package org.example.service;
 
+import org.example.objetos.Tarjeta;
 import org.example.pantalla.PantallaBusqueda;
+import org.example.pantalla.PantallaConsultaCompra;
+import org.example.pantalla.PantallaVigente;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
 public class TarjetaServiceImpl {
 
     Scanner in = new Scanner(System.in);
+    LocalDate hoy= LocalDate.now();
 
-    public void busqueda() {
-        new PantallaBusqueda();
+    public String busqueda() {
+        boolean validarCantidadnum, tarjetaValida, soloNumeros;
         boolean end=false;
         while(end==false){
-            String opcion= in.nextLine().trim();
+            new PantallaBusqueda();
+            String opc= in.nextLine().trim();
+                switch (opc.toUpperCase()) {
+                    case "X":
+                        end = true;
+                        break;
+                    case "":
+                        System.out.print("El campo no puede estar vacio. Presione una tecla para continuar.");
+                        in.nextLine();
+                        break;
+                    default:
+                        soloNumeros= sonNumeros(opc);
+                        if(soloNumeros) {
+                            validarCantidadnum = cantidadNumerosOK(opc);
+                            tarjetaValida = verificarTarjeta(opc);
 
+                            if (validarCantidadnum || tarjetaValida) {
+                                return opc;
+                            } else {
+                                System.out.println("El numero de tarjeta ingresado es incorrecto. Presione una tecla para continuar.");
+                                in.nextLine();
+                            }
+                        }else{
+                            System.out.println("Debe ingresar unicamente numeros. Presione una tecla para continuar.");
+                            in.nextLine();
+                        }
+                        break;
+                    }
+            }
+        return null;
         }
+
+    private boolean sonNumeros(String opc) {
+        for(int i =0; i<opc.length();i++){
+            if(Character.isLetter(opc.charAt(i))){
+                return false;
+            }
+        }
+        return true;
     }
+
 
     public boolean verificarTarjeta(String tarjeta){
         // Voy a utilizar el algoritmo de Lhun para verificar si el numero de la tarjeta es correcto.
@@ -33,13 +78,139 @@ public class TarjetaServiceImpl {
 
             if(num>=10){            //Este if solo puede ingresar cuando el num es mayor a 10, es decir solo si se hizo la multiplicacion y el resultado tiene 2 digitos
                 sumaDigitos+=num%10;
-                num+=1;
+                sumaDigitos+=1;
+            }else {
+                sumaDigitos += num;  // sumo los numeros
             }
-            sumaDigitos+=num;  // sumo los numeros
             multiplicar= !multiplicar; // cambio de valor mi variable booleana
         }
 
         return (sumaDigitos%10 ==0); // devuelve verdadero, solo si el el resto me da 0, cumpliendo con el algoritmo de lhun
     }
 
+    public boolean cantidadNumerosOK(String tarjeta){
+        if (tarjeta.length()<13 || tarjeta.length()>=16){
+            return false;
+        }
+        return true;
+    }
+
+    public void buscarNroTarjeta(String numero, List<Tarjeta> listadoTarjetas) {
+        boolean encontrada=false;
+        int pos=0;
+        for(int i=0; i<listadoTarjetas.size();i++){
+            if(listadoTarjetas.get(i).getNumero().equals(numero)){
+                pos=i;
+                i=listadoTarjetas.size();
+                encontrada=true;
+            }
+        }
+        if(encontrada){
+            System.out.println("***********************************");
+            System.out.println(listadoTarjetas.get(pos));
+            System.out.println("Presione una tecla para continuar");
+            in.nextLine();
+        }else{
+
+            System.out.println("No se encuentra esa tarjeta en nuestra base de datos. Presione una tecla para continuar");
+            in.nextLine();
+        }
+    }
+
+    public void consultaCompra() {
+        boolean end=false , soloNumeros;
+        while(end==false){
+            new PantallaConsultaCompra();
+            String opc= in.nextLine().trim();
+            switch (opc.toUpperCase()) {
+                case "X":
+                    end = true;
+                    break;
+                case "":
+                    System.out.print("El campo no puede estar vacio. Presione una tecla para continuar.");
+                    in.nextLine();
+                    break;
+                default:
+                    soloNumeros = sonNumeros(opc);
+                    if(soloNumeros){
+                        if (Integer.parseInt(opc)<1000){
+                            System.out.println("Usted PUEDE realizar la compra. Presione una tecla para continuar.");
+                            in.nextLine();
+                        }else{
+                            System.out.println("Usted NO puede realizar la compra. Presione una tecla para continuar.");
+                            in.nextLine();
+                        }
+                        end=true;
+                    }else{
+                        System.out.println("Debe ingresar unicamente numeros. Presione una tecla para continuar.");
+                        in.nextLine();
+                    }
+                    break;
+                }
+            }
+        }
+
+
+
+    public void puedoOperarTarjetaVigente() {
+        boolean end=false , formatoValido;
+        while(end==false){
+            new PantallaVigente();
+            String opc= in.nextLine().trim();
+            switch (opc.toUpperCase()) {
+                case "X":
+                    end = true;
+                    break;
+                case "":
+                    System.out.print("El campo no puede estar vacio. Presione una tecla para continuar.");
+                    in.nextLine();
+                    break;
+                default:
+                    formatoValido = validarFormato(opc);
+                    if (formatoValido) {
+                        if(Integer.parseInt(opc.substring(0,2))>=1 && Integer.parseInt(opc.substring(0,2))<=12){
+                        if (tarjetaVigente(opc)) {
+                            System.out.println("Su tarjeta se encuentra VIGENTE para operar. Presione una tecla para continuar.");
+                            in.nextLine();
+                        } else {
+                            System.out.println("Su tarjeta NO PUEDE operar. Esta Vencida. Presione una tecla para continuar.");
+                            in.nextLine();
+                        }
+                        end = true;
+                    } else {
+                            System.out.println("El mes debe estar comprendido entre 1 y 12. Presione una tecla para continuar");
+                            in.nextLine();
+                    }
+            }else{
+                        System.out.println("Formato invalido. Formato Requerido: AAAA-MM. Presione una tecla para continuar");
+                        in.nextLine();
+            }
+                    break;
+            }
+        }
+
+    }
+
+    private boolean tarjetaVigente(String opc) {
+        int anioTarjeta= Integer.parseInt(opc.substring(3,7));
+        int mesTarjeta = Integer.parseInt(opc.substring(0,2));
+        if(anioTarjeta>=hoy.getYear()){
+            if(mesTarjeta>hoy.getMonthValue()){return true;}
+        }
+        return false;
+    }
+
+    private boolean validarFormato(String opc) {
+        if(opc.length()!=7){return false;}
+        for(int i=0; i<opc.length();i++){
+            if(i<2){
+                if(Character.isDigit(opc.charAt(i))==false){return false;}
+            }else if(i==2){
+                if(Character.isDigit(opc.charAt(i)) || Character.isLetter(opc.charAt(i))){ return false;}
+            }else if(i<2){
+                if(Character.isDigit(opc.charAt(i))==false){return false;}
+            }
+        }
+        return true;
+    }
 }

@@ -4,7 +4,7 @@ public class Tarjeta {
     private String marca;
     private String numero;
     private String cardHolder;
-    private String fechanacimiento;
+    private String fechavencimiento;
 
     //*****************
     //** Constructor **
@@ -13,11 +13,11 @@ public class Tarjeta {
     public Tarjeta() {
     }
 
-    public Tarjeta(String marca, String numero, String cardHolder, String fechanacimiento) {
+    public Tarjeta(String marca, String numero, String cardHolder, String fechavencimiento) {
         this.marca = marca;
         this.numero = numero;
         this.cardHolder = cardHolder;
-        this.fechanacimiento = fechanacimiento;
+        this.fechavencimiento = fechavencimiento;
     }
 
     //***********************
@@ -49,16 +49,16 @@ public class Tarjeta {
         this.cardHolder = cardHolder;
     }
 
-    public String getFechanacimiento() {
-        return fechanacimiento;
+    public String getFechavencimiento() {
+        return fechavencimiento;
     }
 
-    public void setFechanacimiento(String fechanacimiento) {
-        this.fechanacimiento = fechanacimiento;
+    public void setFechavencimiento(String fechavencimiento) {
+        this.fechavencimiento = fechavencimiento;
     }
     @Override
     public String toString(){
-        return "Marca : "+this.marca+"\nNumero : "+this.numero+"\nCardHolder : "+this.cardHolder+"\nFecha de Vencimiento : "+this.fechanacimiento+"\n***********************************l";
+        return "Marca : "+this.marca+"\nNumero : "+this.numero+"\nCardHolder : "+this.cardHolder+"\nFecha de Vencimiento : "+this.fechavencimiento+"\n***********************************";
 
     }
 }
