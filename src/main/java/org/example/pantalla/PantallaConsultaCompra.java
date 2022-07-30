@@ -7,7 +7,7 @@ public class PantallaConsultaCompra {
         System.out.println("*****  Puedo realizar la compra ?   *****");
         System.out.println("*****************************************");
         System.out.println("");
-        System.out.print("Ingrese el importe (X : Exit) :");
+        System.out.print("Ingrese el importe (X : Exit) : ");
         return;
     }
 }

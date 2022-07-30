@@ -7,7 +7,7 @@ public class PantallaVigente {
         System.out.println("*****  Mi tarjeta esta vigente?   *****");
         System.out.println("***************************************");
         System.out.println("");
-        System.out.print("Ingrese su fecha de vencimiento.(Formato MM/AAAA) (X : Exit) :");
+        System.out.print("Ingrese su fecha de vencimiento.(Formato MM/AAAA) (X : Exit) : ");
         return;
     }
 }

@@ -21,7 +21,7 @@ public class Main {
 
 
         //** Dibujo la Pantalla **
-      /*  System.out.println("*************************************");
+        /*  System.out.println("*************************************");
         System.out.println("Bienvenido al sistema de ELDAR S.R.L.");
         System.out.println("*************************************");
         System.out.println("");
@@ -58,6 +58,7 @@ public class Main {
                     tarjetaService.puedoOperarTarjetaVigente();
                     break;
                 case "T":  // Cual es la tasa segun Tarjeta?
+                    tarjetaService.calcularTasa();
                     break;
                 case "V":  // Verifica q la tarjeta sea o no duplicada
                     break;
