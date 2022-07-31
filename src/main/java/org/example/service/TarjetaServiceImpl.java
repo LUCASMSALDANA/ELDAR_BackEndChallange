@@ -136,7 +136,7 @@ public class TarjetaServiceImpl {
                             System.out.println("Usted PUEDE realizar la compra. Presione una tecla para continuar.");
                             in.nextLine();
                         } else {
-                            System.out.println("Usted NO puede realizar la compra. Presione una tecla para continuar.");
+                            System.out.println("Usted NO puede realizar la compra, ya que supera los 1000. Presione una tecla para continuar.");
                             in.nextLine();
                         }
                         end = true;
@@ -227,7 +227,7 @@ public class TarjetaServiceImpl {
                 default:
                     if (validarFormatoImporte(opc)) {
                         float importe = Float.parseFloat(prepararNumeroFloat(opc));
-                        if(importe>1000) {
+                        if(importe<1000) {
                             mostrarMensajedeTasa(importe, tarjeta);
                         }else{
                             System.out.println("No puede operar, su operacion supera los 1000.");
