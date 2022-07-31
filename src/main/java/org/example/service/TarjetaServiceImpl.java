@@ -202,7 +202,7 @@ public class TarjetaServiceImpl {
                 case "AMEX":
                 case "NARA":
                 case "VISA":
-                    tarjeta = opc;
+                    tarjeta = opc.toUpperCase();
                     calcularElImporte(tarjeta);
                     end = true;
                     break;
@@ -489,7 +489,7 @@ public class TarjetaServiceImpl {
                 case "AMEX":
                 case "NARA":
                 case "VISA":
-                    tarjeta = opc;
+                    tarjeta = opc.toUpperCase();
                     calcularElImporte(tarjeta);
                     end = true;
                     break;

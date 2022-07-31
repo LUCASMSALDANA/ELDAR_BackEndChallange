@@ -7,7 +7,7 @@ public class PantallaTasa {
         System.out.println("*****  Cual tasa corresponde a mi tarjeta ?   *****");
         System.out.println("***************************************************");
         System.out.println("");
-        System.out.print("Ingrese su Tarjeta (X : Exit) : ");
+        System.out.print("Ingrese la Marca de su Tarjeta (X : Exit) : ");
         return;
     }
 }
