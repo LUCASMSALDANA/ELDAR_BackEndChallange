@@ -51,7 +51,7 @@ public class TarjetaServiceImpl {
 
     private boolean sonNumeros(String opc) {
         for (int i = 0; i < opc.length(); i++) {
-            if (Character.isLetter(opc.charAt(i))) {
+            if (!Character.isDigit(opc.charAt(i) )) {
                 return false;
             }
         }
@@ -217,30 +217,35 @@ public class TarjetaServiceImpl {
     private void calcularElImporte(String tarjeta) {
         boolean end = false;
         while (end == false) {
-            boolean error=false;
+            boolean error = false;
             System.out.print("Ingrese el importe a realizar con su tarjeta : ");
-            String opc=in.nextLine().trim();
-           switch (opc.toUpperCase()){
-               case "X":
-                   end = true;
-                   break;
-               default:
-                   if(validarFormatoImporte(opc)){
-                       float importe= Float.parseFloat(prepararNumeroFloat(opc));
-                       mostrarMensajedeTasa(importe,tarjeta);
-                       end=true;
-                   }else{
-                       System.out.println("Ingrese solo numeros. Presiones una tecla para continuar.");
-                       in.nextLine();
-                   }
-           }
+            String opc = in.nextLine().trim();
+            switch (opc.toUpperCase()) {
+                case "X":
+                    end = true;
+                    break;
+                default:
+                    if (validarFormatoImporte(opc)) {
+                        float importe = Float.parseFloat(prepararNumeroFloat(opc));
+                        if(importe>1000) {
+                            mostrarMensajedeTasa(importe, tarjeta);
+                        }else{
+                            System.out.println("No puede operar, su operacion supera los 1000.");
+                            in.nextLine();
+                        }
+                        end = true;
+                    } else {
+                        System.out.println("Ingrese solo numeros. Presiones una tecla para continuar.");
+                        in.nextLine();
+                    }
+            }
 
         }
         return;
     }
 
     private void mostrarMensajedeTasa(float importe, String tarjeta) {
-        double tasa=0;
+        double tasa = 0;
         switch (tarjeta.toUpperCase()) {
             case "VISA":
                 tasa = calculoAnio() / LocalDate.now().getMonthValue();
@@ -270,42 +275,44 @@ public class TarjetaServiceImpl {
                 }
                 break;
         }
-        double importetotal =importe+(importe*tasa/100);
-        String texto = String.format("La tasa para su tarjeta "+tarjeta+" es de %.2f. El importe total a pagar es de %.2f ",tasa,importetotal);
+        double importetotal = importe + (importe * tasa / 100);
+        String texto = String.format("La tasa para su tarjeta " + tarjeta + " es de %.2f. El importe total a pagar es de %.2f ", tasa, importetotal);
         System.out.println(texto);
         System.out.print("Presione una tecla para continuar.");
         in.nextLine();
-        return ;
+        return;
 
     }
 
     private String prepararNumeroFloat(String opc) {
-        int count=0;
-        String numeroLimpio="";
-        for(int i =0; i<opc.length(); i++){
-            if(!Character.isDigit(opc.charAt(i))){
-                if(count<1){
-                count+=1;
-                numeroLimpio+=opc.substring(i,i+1);
+        int count = 0;
+        String numeroLimpio = "";
+        for (int i = 0; i < opc.length(); i++) {
+            if (!Character.isDigit(opc.charAt(i))) {
+                if (count < 1) {
+                    count += 1;
+                    numeroLimpio += opc.substring(i, i + 1);
                 }
 
-            }else {
+            } else {
                 numeroLimpio += opc.substring(i, i + 1);
             }
         }
         return numeroLimpio;
     }
 
-    public double calculoAnio(){
-        double anio=LocalDate.now().getYear();
-        int sacodigitos =LocalDate.now().getYear()/100;
-        anio = Math.round(((anio/100) -sacodigitos)*100);
+    public double calculoAnio() {
+        double anio = LocalDate.now().getYear();
+        int sacodigitos = LocalDate.now().getYear() / 100;
+        anio = Math.round(((anio / 100) - sacodigitos) * 100);
         return anio;
     }
 
     private boolean validarFormatoImporte(String opc) {
-        for(int i =0; i<opc.length();i++){
-            if(Character.isLetter(opc.charAt(i))){return false;}
+        for (int i = 0; i < opc.length(); i++) {
+            if (Character.isLetter(opc.charAt(i))) {
+                return false;
+            }
         }
         return true;
     }
@@ -345,7 +352,7 @@ public class TarjetaServiceImpl {
 
     public void tarjetaDuplicada(List<Tarjeta> listadoTarjetas) {
         boolean validarCantidadnum, tarjetaValida, soloNumeros;
-        boolean end = false , tarjetaEncontrada= false;
+        boolean end = false, tarjetaEncontrada = false;
         while (end == false) {
             new PantallaTarjetaDuplicada();
             String opc = in.nextLine().trim();
@@ -364,18 +371,18 @@ public class TarjetaServiceImpl {
                         tarjetaValida = verificarTarjeta(opc);
 
                         if (validarCantidadnum || tarjetaValida) {
-                            for(int i=0;i<listadoTarjetas.size();i++){
-                                if(opc.equals(listadoTarjetas.get(i).getNumero())){
-                                    tarjetaEncontrada=true;
-                                    i=listadoTarjetas.size();
-                                }else{
-                                    tarjetaEncontrada=false;
+                            for (int i = 0; i < listadoTarjetas.size(); i++) {
+                                if (opc.equals(listadoTarjetas.get(i).getNumero())) {
+                                    tarjetaEncontrada = true;
+                                    i = listadoTarjetas.size();
+                                } else {
+                                    tarjetaEncontrada = false;
                                 }
                             }
-                            end=true;
-                            if(tarjetaEncontrada){
+                            end = true;
+                            if (tarjetaEncontrada) {
                                 System.out.println("La tarjeta ya existe en la base de datos. Presione una tecla para continuar.");
-                            }else{
+                            } else {
                                 System.out.println("La tarjeta no se encuentra en nuestra base de datos. Presione una tecla para continuar.");
                             }
                             in.nextLine();
@@ -391,6 +398,107 @@ public class TarjetaServiceImpl {
             }
         }
     }
+
+    public void realizarUnaCompra() {
+        boolean validarCantidadnum, tarjetaValida, soloNumeros;
+        boolean end = false;
+        while (end == false) {
+            new PantallaCompra();
+            String opc = in.nextLine().trim();
+            switch (opc.toUpperCase()) {
+                case "X":
+                    end = true;
+                    break;
+                case "":
+                    System.out.print("El campo no puede estar vacio. Presione una tecla para continuar.");
+                    in.nextLine();
+                    break;
+                default:
+                    soloNumeros = sonNumeros(opc);
+                    if (soloNumeros) {
+                        validarCantidadnum = cantidadNumerosOK(opc);
+                        tarjetaValida = verificarTarjeta(opc);
+
+                        if (validarCantidadnum || tarjetaValida) {
+                            String fechaVencimiento = tarjetaVigenteCompra();
+                        if(fechaVencimiento==null){return;}
+                        tasaCompra();
+                        end=true;
+                        } else {
+                            System.out.println("El numero de tarjeta ingresado es incorrecto. Presione una tecla para continuar.");
+                            in.nextLine();
+                        }
+                    } else {
+                        System.out.println("Debe ingresar unicamente numeros. Presione una tecla para continuar.");
+                        in.nextLine();
+                    }
+                    break;
+            }
+        }
+        return;
+
+    }
+
+    public String tarjetaVigenteCompra() {
+        boolean end = false, formatoValido;
+        while (end == false) {
+            System.out.print("Ingrese su fecha de vencimiento.(Formato MM/AAAA) (X : Exit) : ");
+            String opc = in.nextLine().trim();
+            switch (opc.toUpperCase()) {
+                case "X":
+                    end = true;
+                    return null;
+                case "":
+                    System.out.print("El campo no puede estar vacio. Presione una tecla para continuar.");
+                    in.nextLine();
+                    break;
+                default:
+                    formatoValido = validarFormato(opc);
+                    if (formatoValido) {
+                        if (Integer.parseInt(opc.substring(0, 2)) >= 1 && Integer.parseInt(opc.substring(0, 2)) <= 12) {
+                            if (tarjetaVigente(opc)) {
+                                return opc;
+                            } else {
+                                System.out.println("Su tarjeta NO PUEDE operar. Esta Vencida. Presione una tecla para continuar.");
+                                in.nextLine();
+                            }
+                            end = true;
+                        } else {
+                            System.out.println("El mes debe estar comprendido entre 1 y 12. Presione una tecla para continuar");
+                            in.nextLine();
+                        }
+                    } else {
+                        System.out.println("Formato invalido. Formato Requerido: AAAA-MM. Presione una tecla para continuar");
+                        in.nextLine();
+                    }
+                    break;
+            }
+        }
+        return null;
+    }
+    public void tasaCompra() {
+        boolean end = false;
+        String tarjeta;
+        while (end == false) {
+            System.out.print("Ingrese la Marca de su Tarjeta (X : Exit) : ");
+            String opc = in.nextLine().trim();
+            switch (opc.toUpperCase()) {
+                case "X":
+                    end = true;
+                    break;
+                case "AMEX":
+                case "NARA":
+                case "VISA":
+                    tarjeta = opc;
+                    calcularElImporte(tarjeta);
+                    end = true;
+                    break;
+                default:
+                    System.out.println("La tarjeta ingresada no se encuentra en nuestro Sistema. Presione una tecla para continuar");
+                    in.nextLine();
+                    break;
+            }
+        }
+    }
+
 }
-
-

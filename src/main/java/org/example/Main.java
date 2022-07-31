@@ -49,6 +49,7 @@ public class Main {
                     tarjetaService.tarjetaDuplicada(listadoTarjetas);
                     break;
                 case "COMPRAR": // Realiza una compra
+                    tarjetaService.realizarUnaCompra();
                     break;
                 case "X": // Sale del programa
                     end=true;
