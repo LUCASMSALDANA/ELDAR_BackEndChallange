@@ -232,6 +232,7 @@ public class TarjetaServiceImpl {
                    if(validarFormatoImporte(opc)){
                        float importe= Float.parseFloat(prepararNumeroFloat(opc));
                        mostrarMensajedeTasa(importe,tarjeta);
+                       end=true;
                    }else{
                        System.out.println("Ingrese solo numeros. Presiones una tecla para continuar.");
                        in.nextLine();
@@ -239,12 +240,48 @@ public class TarjetaServiceImpl {
            }
 
         }
+        return;
     }
 
     private void mostrarMensajedeTasa(float importe, String tarjeta) {
-        if(tarjeta == "AMEX"){
-
+        double tasa=0;
+        switch (tarjeta.toUpperCase()) {
+            case "VISA":
+                tasa = calculoAnio() / LocalDate.now().getMonthValue();
+                if (tasa < 0.3) {
+                    tasa = 0.3;
+                }
+                if (tasa > 5) {
+                    tasa = 5;
+                }
+                break;
+            case "NARA":
+                tasa = LocalDate.now().getDayOfMonth() * 0.5;
+                if (tasa < 0.3) {
+                    tasa = 0.3;
+                }
+                if (tasa > 5) {
+                    tasa = 5;
+                }
+                break;
+            case "AMEX":
+                tasa = LocalDate.now().getMonthValue() * 0.1;
+                System.out.println(tasa);
+                if (tasa < 0.3) {
+                    tasa = 0.3;
+                }
+                if (tasa > 5) {
+                    tasa = 5;
+                }
+                break;
         }
+        double importetotal =importe+(importe*tasa/100);
+        String texto = String.format("La tasa para su tarjeta "+tarjeta+" es de %.2f. El importe total a pagar es de %.2f ",tasa,importetotal);
+        System.out.println(texto);
+        System.out.println("Presione una tecla para continuar.");
+        in.nextLine();
+        return ;
+
     }
 
     private String prepararNumeroFloat(String opc) {
@@ -262,6 +299,13 @@ public class TarjetaServiceImpl {
             }
         }
         return numeroLimpio;
+    }
+
+    public double calculoAnio(){
+        double anio=LocalDate.now().getYear();
+        int sacodigitos =LocalDate.now().getYear()/100;
+        anio = Math.round(((anio/100) -sacodigitos)*100);
+        return anio;
     }
 
     private boolean validarFormatoImporte(String opc) {
