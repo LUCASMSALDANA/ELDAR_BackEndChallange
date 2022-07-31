@@ -1,14 +1,10 @@
 package org.example.service;
 
+import org.example.Main;
 import org.example.objetos.Tarjeta;
-import org.example.pantalla.PantallaBusqueda;
-import org.example.pantalla.PantallaConsultaCompra;
-import org.example.pantalla.PantallaTasa;
-import org.example.pantalla.PantallaVigente;
+import org.example.pantalla.*;
 
 import java.time.LocalDate;
-import java.time.Period;
-import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -266,7 +262,6 @@ public class TarjetaServiceImpl {
                 break;
             case "AMEX":
                 tasa = LocalDate.now().getMonthValue() * 0.1;
-                System.out.println(tasa);
                 if (tasa < 0.3) {
                     tasa = 0.3;
                 }
@@ -278,7 +273,7 @@ public class TarjetaServiceImpl {
         double importetotal =importe+(importe*tasa/100);
         String texto = String.format("La tasa para su tarjeta "+tarjeta+" es de %.2f. El importe total a pagar es de %.2f ",tasa,importetotal);
         System.out.println(texto);
-        System.out.println("Presione una tecla para continuar.");
+        System.out.print("Presione una tecla para continuar.");
         in.nextLine();
         return ;
 
@@ -346,6 +341,55 @@ public class TarjetaServiceImpl {
             }
         }
         return true;
+    }
+
+    public void tarjetaDuplicada(List<Tarjeta> listadoTarjetas) {
+        boolean validarCantidadnum, tarjetaValida, soloNumeros;
+        boolean end = false , tarjetaEncontrada= false;
+        while (end == false) {
+            new PantallaTarjetaDuplicada();
+            String opc = in.nextLine().trim();
+            switch (opc.toUpperCase()) {
+                case "X":
+                    end = true;
+                    break;
+                case "":
+                    System.out.print("El campo no puede estar vacio. Presione una tecla para continuar.");
+                    in.nextLine();
+                    break;
+                default:
+                    soloNumeros = sonNumeros(opc);
+                    if (soloNumeros) {
+                        validarCantidadnum = cantidadNumerosOK(opc);
+                        tarjetaValida = verificarTarjeta(opc);
+
+                        if (validarCantidadnum || tarjetaValida) {
+                            for(int i=0;i<listadoTarjetas.size();i++){
+                                if(opc.equals(listadoTarjetas.get(i).getNumero())){
+                                    tarjetaEncontrada=true;
+                                    i=listadoTarjetas.size();
+                                }else{
+                                    tarjetaEncontrada=false;
+                                }
+                            }
+                            end=true;
+                            if(tarjetaEncontrada){
+                                System.out.println("La tarjeta ya existe en la base de datos. Presione una tecla para continuar.");
+                            }else{
+                                System.out.println("La tarjeta no se encuentra en nuestra base de datos. Presione una tecla para continuar.");
+                            }
+                            in.nextLine();
+                        } else {
+                            System.out.println("El numero de tarjeta ingresado es incorrecto. Presione una tecla para continuar.");
+                            in.nextLine();
+                        }
+                    } else {
+                        System.out.println("Debe ingresar unicamente numeros. Presione una tecla para continuar.");
+                        in.nextLine();
+                    }
+                    break;
+            }
+        }
     }
 }
 

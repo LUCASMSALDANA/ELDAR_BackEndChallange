@@ -15,25 +15,10 @@ public class Main {
 
         Scanner in = new Scanner(System.in); // Creo mi variable Scanner para que la persona pueda ingresar una tarjeta
         CreacionListaTarjetas creacionListaTarjetas = new CreacionListaTarjetas(); // Esta clase la uso como si fuera una "BBDD", es para poder traer una tarjeta y mostrarla por pantalla
-        List<Tarjeta> listadoTarjetas =  creacionListaTarjetas.crearListaTarjetas(); // llamo al metodo crearListaTarjetas de mi clase creacion lista tarjetas, y guardo esa lista en una variable de tipo List.
+         List<Tarjeta> listadoTarjetas =  creacionListaTarjetas.crearListaTarjetas(); // llamo al metodo crearListaTarjetas de mi clase creacion lista tarjetas, y guardo esa lista en una variable de tipo List.
 
         TarjetaServiceImpl tarjetaService = new TarjetaServiceImpl(); // Instancio mi clase TarjetaServiceImpl. para poder utilizar sus metodos
 
-
-        //** Dibujo la Pantalla **
-        /*  System.out.println("*************************************");
-        System.out.println("Bienvenido al sistema de ELDAR S.R.L.");
-        System.out.println("*************************************");
-        System.out.println("");
-        System.out.println("Ingrese una opcion a realizar");
-        System.out.println("L: Listado de Tarjetas en BBDD");
-        System.out.println("B: Buscar Información de una tarjeta");
-        System.out.println("C: ¿Puedo realizar la Compra?");
-        System.out.println("O: ¿Mi tarjeta sigue vigente para Operar?");
-        System.out.println("T: ¿Cual es la tasa que me corresponde para una operacion?");
-        System.out.println("V: Verificar si mi tarjeta es duplicada");
-
-       */
 
         while(end==false){
             new Pantalla();
@@ -61,6 +46,7 @@ public class Main {
                     tarjetaService.calcularTasa();
                     break;
                 case "V":  // Verifica q la tarjeta sea o no duplicada
+                    tarjetaService.tarjetaDuplicada(listadoTarjetas);
                     break;
                 case "COMPRAR": // Realiza una compra
                     break;
