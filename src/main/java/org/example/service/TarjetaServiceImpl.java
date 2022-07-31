@@ -207,6 +207,7 @@ public class TarjetaServiceImpl {
                 case "NARA":
                 case "VISA":
                     tarjeta = opc;
+                    calcularElImporte(tarjeta);
                     end = true;
                     break;
                 default:
@@ -215,6 +216,59 @@ public class TarjetaServiceImpl {
                     break;
             }
         }
+    }
+
+    private void calcularElImporte(String tarjeta) {
+        boolean end = false;
+        while (end == false) {
+            boolean error=false;
+            System.out.print("Ingrese el importe a realizar con su tarjeta : ");
+            String opc=in.nextLine().trim();
+           switch (opc.toUpperCase()){
+               case "X":
+                   end = true;
+                   break;
+               default:
+                   if(validarFormatoImporte(opc)){
+                       float importe= Float.parseFloat(prepararNumeroFloat(opc));
+                       mostrarMensajedeTasa(importe,tarjeta);
+                   }else{
+                       System.out.println("Ingrese solo numeros. Presiones una tecla para continuar.");
+                       in.nextLine();
+                   }
+           }
+
+        }
+    }
+
+    private void mostrarMensajedeTasa(float importe, String tarjeta) {
+        if(tarjeta == "AMEX"){
+
+        }
+    }
+
+    private String prepararNumeroFloat(String opc) {
+        int count=0;
+        String numeroLimpio="";
+        for(int i =0; i<opc.length(); i++){
+            if(!Character.isDigit(opc.charAt(i))){
+                if(count<1){
+                count+=1;
+                numeroLimpio+=opc.substring(i,i+1);
+                }
+
+            }else {
+                numeroLimpio += opc.substring(i, i + 1);
+            }
+        }
+        return numeroLimpio;
+    }
+
+    private boolean validarFormatoImporte(String opc) {
+        for(int i =0; i<opc.length();i++){
+            if(Character.isLetter(opc.charAt(i))){return false;}
+        }
+        return true;
     }
 
     private boolean tarjetaVigente(String opc) {
